@@ -68,7 +68,7 @@
       let searchData = document.getElementById("search-id").value;
 
       // URLの生成 本来はサーバー側で処理すべき(apikeyがユーザーに見えてしまうので)
-      let _url = `https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&q=${searchData}&key=${API_KEY}`;
+      let _url = `https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=${API_KEY}&freeword=${searchData}`;
       // Ajax(XMLHttpRequest)処理
       // APIを実行して結果のJSONデータを加工している
       let xhttp = new XMLHttpRequest();
@@ -76,8 +76,8 @@
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           let res = JSON.parse(xhttp.responseText);
-          for (let i = 0; i < res.items.length; i++) {
-            addCardItem(res.items[i]);
+          for (let i = 0; i < res.rest.length; i++) {
+            addCardItem(res.rest[i]);
           }
         }
       };
@@ -92,20 +92,12 @@
       node.setAttribute("class", "column");
       var txt =
         `<div class="callout"><a href="">` +
-        `<p>${item.snippet.title}</p>` +
-        createVideoTag(item.id.videoId) +
-        `<p>${item.snippet.description}</p>` +
-        `<p class="subheader">${item.snippet.publishedAt}</p>` +
+        `<p>${item.name}</p>` +
+        `<img src="${item.image_url.shop_image1}" alt="">` +
         `</a></div>`;
 
       node.innerHTML = txt;
       mainBlock.appendChild(node);
-    }
-
-    // ビデオタグの生成処理
-    function createVideoTag(vid) {
-      return `<iframe width="100%" src="https://www.youtube.com/embed/${vid}"` +
-        `frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
     }
   </script>
 </body>
