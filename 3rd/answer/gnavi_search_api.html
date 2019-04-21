@@ -35,9 +35,12 @@
       // 通信が終わった時の処理
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          var node = document.createElement("div");
-          node.innerHTML = xhttp.responseText;
-          mainBlock.appendChild(node);
+          let res = JSON.parse(xhttp.responseText);
+          for (let i = 0; i < res.rest.length; i++) {
+            let node = document.createElement("div");
+            node.innerHTML += res.rest[i].name;
+            mainBlock.appendChild(node);
+          }
         }
       };
       // データ取得開始

@@ -18,14 +18,19 @@
     // 親要素を取得
     const mainBlock = document.getElementById("main-block");
 
+    // JSONの代わりにデータをオブジェクトで定義
     let data = {
-      image: "https://grapee.jp/wp-content/uploads/32187_main2.jpg"
+      image: "https://grapee.jp/wp-content/uploads/32187_main2.jpg",
+      description: "猫の画像です"
     }
 
     // DOMを動的に生成している
     function addCardItem() {
       var node = document.createElement("div");
-      node.innerHTML = `<img src="${data.image}" alt="">`;
+      // `data`変数の中の、`image`を使用する
+      // `${変数}`という書き方は覚えておきましょう
+      // シングルクォテーション、ダブルクォテーションじゃないことに注意
+      node.innerHTML = `<img src="${data.image}" alt=""><p>${data.description}</p>`;
       mainBlock.appendChild(node);
     }
   </script>

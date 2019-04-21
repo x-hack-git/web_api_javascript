@@ -11,9 +11,12 @@
 
   <!-- 検索フォーム -->
   <div class="row">
-    <div class="small-6 large-4 columns">
-      <a class="button" onclick="loadUrl()">検索</a>
+    <div class="small-2 large-2 columns">検索ワード</div>
+    <div class="small-4 large-4 columns">
+      <input id="search-id" class="" type="text" placeholder="検索ワードを入力してください" />
     </div>
+    <div class="small-6 large-4 columns">
+      <a class="button" onclick="loadUrl()">検索</a></div>
   </div>
 
   <!-- リスト -->
@@ -26,9 +29,15 @@
     const mainBlock = document.getElementById("main-block");
 
     function loadUrl() {
+
+      // 全ての子要素を削除する
+      while (mainBlock.firstChild) mainBlock.removeChild(mainBlock.firstChild);
+
+      // 検索ワードを取得する
+      let searchData = document.getElementById("search-id").value;
+
       // URLの生成 本来はサーバー側で処理すべき(apikeyがユーザーに見えてしまうので)
-      // 課題：検索ワードを受け取れるようにしてみよう
-      let _url = `https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=${API_KEY}&freeword=焼肉`;
+      let _url = `https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=${API_KEY}&freeword=${searchData}`;
       // Ajax(XMLHttpRequest)処理
       // APIを実行して結果のJSONデータを加工している
       let xhttp = new XMLHttpRequest();
@@ -37,7 +46,7 @@
         if (this.readyState == 4 && this.status == 200) {
           let res = JSON.parse(xhttp.responseText);
           for (let i = 0; i < res.rest.length; i++) {
-            addCardItem(res.rest[i]); // 要素を追加
+            addCardItem(res.rest[i]);
           }
         }
       };
@@ -51,7 +60,7 @@
       var node = document.createElement("div");
       node.setAttribute("class", "column");
       var txt =
-        `<div class="callout"><a href="${item.url}">` +
+        `<div class="callout"><a href="">` +
         `<p>${item.name}</p>` +
         `<img src="${item.image_url.shop_image1}" alt="">` +
         `</a></div>`;
