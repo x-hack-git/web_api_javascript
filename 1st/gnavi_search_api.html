@@ -17,11 +17,15 @@
   <script>
     // 親要素を取得
     const mainBlock = document.getElementById("main-block");
+    console.log(mainBlock);
     // DOMを動的に生成している
     function addCardItem() {
-      var node = document.createElement("div");
+      let node = document.createElement("div");
       node.innerHTML = `<img src="https://grapee.jp/wp-content/uploads/32187_main2.jpg" alt="">`;
+      let pnode = document.createElement("p");
+      pnode.innerHTML = "追加要素";
       mainBlock.appendChild(node);
+      mainBlock.appendChild(pnode);
     }
   </script>
 </body>

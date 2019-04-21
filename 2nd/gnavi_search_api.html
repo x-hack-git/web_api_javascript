@@ -30,6 +30,9 @@
       // `data`変数の中の、`image`を使用する
       // `${変数}`という書き方は覚えておきましょう
       // シングルクォテーション、ダブルクォテーションじゃないことに注意
+      var moji1 = "文字列をダブルクォテーションの中に書く";
+      var moji2 = '文字列をシングルクォテーションの中に書く';
+      var moji3 = `文字列を${data.image}の中に書く`;
       node.innerHTML = `<img src="${data.image}" alt=""><p>${data.description}</p>`;
       mainBlock.appendChild(node);
     }
