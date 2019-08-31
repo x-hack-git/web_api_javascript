@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>X-HACK 動画検索</title>
+  <title>X-HACK WebAPI 勉強会</title>
 </head>
 
 <body>
@@ -15,17 +15,19 @@
   <div id="main-block"></div>
 
   <script>
+    // イベントとは？
+    // イベント登録方法の説明
+    // 色々なイベントを試してみる
+    // chromeのdevツールを使おう
+    // ステップ実行を試す
+
     // 親要素を取得
     const mainBlock = document.getElementById("main-block");
-    console.log(mainBlock);
     // DOMを動的に生成している
     function addCardItem() {
-      let node = document.createElement("div");
-      node.innerHTML = `<img src="https://grapee.jp/wp-content/uploads/32187_main2.jpg" alt="">`;
-      let pnode = document.createElement("p");
-      pnode.innerHTML = "追加要素";
-      mainBlock.appendChild(node);
-      mainBlock.appendChild(pnode);
+      let img_node = document.createElement("img");
+      img_node.src = "https://grapee.jp/wp-content/uploads/32187_main2.jpg";
+      mainBlock.appendChild(img_node);
     }
   </script>
 </body>
