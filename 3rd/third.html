@@ -4,11 +4,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>X-HACK 動画検索</title>
+  <title>X-HACK WebAPI 勉強会</title>
 </head>
 
 <body>
-
   <!-- 検索フォーム -->
   <div class="row">
     <div class="small-6 large-4 columns">
@@ -32,17 +31,13 @@
       // Ajax(XMLHttpRequest)処理
       // APIを実行して結果のJSONデータを加工している
       let xhttp = new XMLHttpRequest();
-      // 通信が終わった時の処理
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          var node = document.createElement("div");
-          node.innerHTML = xhttp.responseText;
-          mainBlock.appendChild(node);
-        }
-      };
       // データ取得開始
-      xhttp.open("GET", _url, true);
+      xhttp.open("GET", _url, false);
       xhttp.send();
+      // 通信が終わった時の処理
+      let node = document.createElement("div");
+      node.innerHTML = xhttp.responseText;
+      mainBlock.appendChild(node);
     }
   </script>
 </body>
