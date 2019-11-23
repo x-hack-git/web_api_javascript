@@ -3,15 +3,37 @@ $(document).foundation();
 // 本来はサーバー側で処理してユーザーからは見えないようにする
 const API_KEY = "60e919407001d7a00adc7f4a8764a2d9";
 const MAIN_BLOCK = document.getElementById("main-block");
-const FAVORITE_SHOPS_KEY = "favorite_shops";
 
-let favorite_shops = localStorage.getItem(FAVORITE_SHOPS_KEY);
-// 未定義だった場合は初期化、そうでない場合は文字を配列型に変換しておく
-if(!favorite_shops){
-  favorite_shops = [];
-}else{
-  favorite_shops = favorite_shops.split(",");
+class FavoriteShops {
+
+  constructor(){
+    this.FAVORITE_SHOPS_KEY = "favorite_shops";
+    this.favorite_shops = localStorage.getItem(this.FAVORITE_SHOPS_KEY);
+    if (!this.favorite_shops) {
+      this.favorite_shops = [];
+    } else {
+      this.favorite_shops = this.favorite_shops.split(",");
+    }
+  }
+
+  // 引数に与えられたデータを配列に追加する処理
+  add(id) {
+    // 早期リターン early return
+    if (this.favorite_shops.includes(id)) return;
+
+    this.favorite_shops.push(id);
+    localStorage.setItem(this.FAVORITE_SHOPS_KEY, this.favorite_shops);
+  }
+
+  // 引数に与えられたデータを配列から削除する処理
+  remove(id){
+    this.favorite_shops = this.favorite_shops.filter((item) => {
+      if (item != id) return item;
+    });
+    localStorage.setItem(this.FAVORITE_SHOPS_KEY, this.favorite_shops);
+  }
 }
+let favshops = new FavoriteShops();
 
 // API 呼び出しの関数
 function loadUrl() {
@@ -37,8 +59,9 @@ function loadUrl() {
 }
 
 // カードブロックのクラス
+// レストランの1店舗の情報が集約されたクラス
 class CardItem {
-  constructor (item){
+  constructor(item) {
     this.id = item.id;
     this.node = document.createElement("div");
     this.node.classList.add("column");
@@ -48,28 +71,24 @@ class CardItem {
       item.image_url.shop_image1,
       item.address,
     );
+    this.fav_icon = this.node.querySelector(".favorite");
     // お気に入りリストに存在するか？
-    if(favorite_shops.includes(this.id)){
-      this.node.querySelector(".favorite").classList.add("on");
+    if (favshops.favorite_shops.includes(this.id)) {
+      this.fav_icon.classList.add("on");
     }
     // クリックした時の処理
-    this.node.querySelector(".favorite").onclick = function () {
+    this.fav_icon.onclick = function () {
       let id = this.getAttribute("data-id");
-      if(this.classList.contains("on")) {
+      if (this.classList.contains("on")) {
         this.classList.remove("on");
-        favorite_shops = favorite_shops.filter((item) => {
-          if(item != id) return item;
-        })
-      }else{
+        favshops.remove(id);
+      } else {
         this.classList.add("on");
-        if(!favorite_shops.includes(id)){
-          favorite_shops.push(id);
-        }
-        localStorage.setItem(FAVORITE_SHOPS_KEY, favorite_shops);
+        favshops.add(id);
       }
     }
     // 要素のカスタム属性(HTML5カスタムデータ属性)に識別子をセットする
-    this.node.querySelector(".favorite").setAttribute("data-id", this.id);
+    this.fav_icon.setAttribute("data-id", this.id);
   }
 
   card_item(title, text, image, address) {
@@ -79,7 +98,7 @@ class CardItem {
           ${title}
         </div>
         <div class="sample-box">
-          <img src="${image}">
+          <img class="image" src="${image}">
           <div class="favorite">
             <i class="fa fa-star"></i>
           </div>
