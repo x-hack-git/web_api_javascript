@@ -1,8 +1,17 @@
 $(document).foundation();
 
 // 本来はサーバー側で処理してユーザーからは見えないようにする
-const API_KEY = "d49b6f9e789d3624c8f845616cb555f6"; // apikeyを入力 注意：gitにapikeyを上げないように！！
+const API_KEY = "60e919407001d7a00adc7f4a8764a2d9";
 const MAIN_BLOCK = document.getElementById("main-block");
+const FAVORITE_SHOPS_KEY = "favorite_shops";
+
+let favorite_shops = localStorage.getItem(FAVORITE_SHOPS_KEY);
+// 未定義だった場合は初期化、そうでない場合は文字を配列型に変換しておく
+if(!favorite_shops){
+  favorite_shops = [];
+}else{
+  favorite_shops = favorite_shops.split(",");
+}
 
 // API 呼び出しの関数
 function loadUrl() {
@@ -39,14 +48,28 @@ class CardItem {
       item.image_url.shop_image1,
       item.address,
     );
-    // 存在するか？
-    if(["gcu5401"].includes(this.id)){
+    // お気に入りリストに存在するか？
+    if(favorite_shops.includes(this.id)){
       this.node.querySelector(".favorite").classList.add("on");
     }
     // クリックした時の処理
     this.node.querySelector(".favorite").onclick = function () {
-      this.classList.contains("on") ? this.classList.remove("on") : this.classList.add("on");
+      let id = this.getAttribute("data-id");
+      if(this.classList.contains("on")) {
+        this.classList.remove("on");
+        favorite_shops = favorite_shops.filter((item) => {
+          if(item != id) return item;
+        })
+      }else{
+        this.classList.add("on");
+        if(!favorite_shops.includes(id)){
+          favorite_shops.push(id);
+        }
+        localStorage.setItem(FAVORITE_SHOPS_KEY, favorite_shops);
+      }
     }
+    // 要素のカスタム属性(HTML5カスタムデータ属性)に識別子をセットする
+    this.node.querySelector(".favorite").setAttribute("data-id", this.id);
   }
 
   card_item(title, text, image, address) {
